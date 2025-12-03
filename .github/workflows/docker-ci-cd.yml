@@ -2,9 +2,9 @@ name: CI/CD - Build & Test Docker image
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build-and-test:
@@ -17,17 +17,17 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Build Docker image (tag: myapi)
+      - name: Build Docker image
         run: |
           docker build -t myapi:latest .
 
-      - name: List images (debug)
+      - name: List images
         run: docker images
 
       - name: Run API container
         run: |
           docker run -d --name ci_container -p 8000:8000 myapi:latest
-          sleep 3
+          sleep 5
 
       - name: Test root endpoint
         run: |

@@ -1,0 +1,40 @@
+name: CI/CD - Build & Test Docker image
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build Docker image
+        run: |
+          docker build -t myapi:latest .
+
+      - name: List images
+        run: docker images
+
+      - name: Run API container
+        run: |
+          docker run -d --name ci_container -p 8000:8000 myapi:latest
+          sleep 5
+
+      - name: Test root endpoint
+        run: |
+          curl -s http://localhost:8000/ | grep "FastAPI is running inside Docker"
+
+      - name: Clean up
+        if: always()
+        run: |
+          docker stop ci_container || true
+          docker rm ci_container || true

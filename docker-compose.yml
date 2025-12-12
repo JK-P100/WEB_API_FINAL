@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+
+  django_frontend:
+    build: ./django_frontend
+    container_name: staycation_frontend
+    ports:
+      - "8000:8000"
+    depends_on:
+      - fastapi_api
+
+  fastapi_api:
+    build: ./fastapi_api
+    container_name: staycation_api
+    ports:
+      - "8001:8001"
+    depends_on:
+      - database
+
+  database:
+    image: postgres
+    container_name: staycation_db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: staycation
+    ports:
+      - "5432:5432"

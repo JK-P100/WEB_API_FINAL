@@ -1,0 +1,236 @@
+﻿{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ room.title }} — Staycation{% endblock %}
+{% block content %}
+
+<!-- Hero Image Banner -->
+<div class="room-hero mb-5">
+  <img src="{{ room.image_url }}" class="w-100 room-hero-img" alt="{{ room.title }}" />
+</div>
+
+<div class="container">
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'rooms' %}">Rooms</a></li>
+      <li class="breadcrumb-item active">{{ room.title }}</li>
+    </ol>
+  </nav>
+
+  <div class="row g-5">
+    <!-- Main Content (Left) -->
+    <div class="col-lg-7">
+      <!-- Room Header -->
+      <div class="mb-5">
+        <h1 class="display-5 mb-2">{{ room.title }}</h1>
+        <div class="d-flex align-items-center gap-3">
+          <div class="rating">
+            <span class="text-warning">★★★★★</span>
+            <small class="text-muted">(4.8 out of 5)</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- About This Room -->
+      <div class="mb-5">
+        <h3 class="mb-3">About This Room</h3>
+        <p class="text-muted lead">{{ room.description }}</p>
+        <p class="text-muted">
+          Experience luxury and comfort in our {{ room.title }}. This elegantly designed room 
+          features a king-size bed, a spacious seating area, and floor-to-ceiling windows offering 
+          breathtaking city views. The room is equipped with modern amenities including air conditioning, 
+          smart TV, premium bedding, and a well-stocked mini bar. The marble bathroom features a rain shower, 
+          premium toiletries, and plush towels.
+        </p>
+      </div>
+
+      <!-- Amenities Section -->
+      <div class="mb-5">
+        <h3 class="mb-4">Amenities</h3>
+        <div class="row g-4">
+          {% for amenity in room.amenities %}
+          <div class="col-sm-6">
+            <div class="d-flex gap-3">
+              <div class="amenity-icon">
+                <i class="bi bi-check-circle text-primary fs-5"></i>
+              </div>
+              <div>
+                <h6 class="mb-1">{{ amenity }}</h6>
+                <small class="text-muted">Premium quality amenity</small>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Room Details Table -->
+      <div class="mb-5">
+        <h3 class="mb-4">Room Details</h3>
+        <table class="table table-borderless">
+          <tbody>
+            <tr>
+              <td class="fw-bold text-muted">Size</td>
+              <td class="text-end">450 sq ft</td>
+            </tr>
+            <tr>
+              <td class="fw-bold text-muted">Bed Type</td>
+              <td class="text-end">King Size</td>
+            </tr>
+            <tr>
+              <td class="fw-bold text-muted">Max Guests</td>
+              <td class="text-end">{{ room.capacity }} Adults</td>
+            </tr>
+            <tr>
+              <td class="fw-bold text-muted">View</td>
+              <td class="text-end">City View</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Policies Section -->
+      <div class="mb-5 p-4 bg-light rounded">
+        <h3 class="mb-4">Policies</h3>
+        <ul class="list-unstyled">
+          <li class="mb-3">
+            <strong>Check-in:</strong> After 3:00 PM
+          </li>
+          <li class="mb-3">
+            <strong>Check-out:</strong> Before 11:00 AM
+          </li>
+          <li class="mb-3">
+            <strong>Cancellation:</strong> Free cancellation up to 24 hours before check-in
+          </li>
+          <li class="mb-3">
+            <strong>Pets:</strong> Not allowed
+          </li>
+          <li>
+            <strong>Smoking:</strong> Non-smoking room
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Booking Sidebar (Right) -->
+    <div class="col-lg-5">
+      <div class="card shadow-lg sticky-top" style="top: 20px;">
+        <div class="card-body p-4">
+          <!-- Price Display -->
+          <div class="mb-4 pb-4 border-bottom">
+            <h2 class="text-primary mb-1">${{ room.price }}<span class="fs-6 text-muted">/night</span></h2>
+            <small class="text-muted">Average nightly rate</small>
+          </div>
+
+          <!-- Check-in / Check-out -->
+          <div class="mb-4 pb-4 border-bottom">
+            <h6 class="text-muted small mb-3">CHECK-IN / CHECK-OUT</h6>
+            <div class="row g-2">
+              <div class="col-6">
+                <small class="d-block text-muted mb-1">Check-in</small>
+                <strong>After 3:00 PM</strong>
+              </div>
+              <div class="col-6">
+                <small class="d-block text-muted mb-1">Check-out</small>
+                <strong>Before 11:00 AM</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Guests -->
+          <div class="mb-4 pb-4 border-bottom">
+            <h6 class="text-muted small mb-2">GUESTS</h6>
+            <p class="fw-bold mb-0">Up to {{ room.capacity }} Guest{{ room.capacity|pluralize }}</p>
+          </div>
+
+          <!-- Price Breakdown -->
+          <div class="mb-4 pb-4 border-bottom">
+            <h6 class="text-muted small mb-3">ESTIMATED PRICE</h6>
+            <div class="d-flex justify-content-between mb-2">
+              <span>${{ room.price }} × 1 night</span>
+              <span class="fw-bold">${{ room.price }}</span>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+              <span>Service fee</span>
+              <span class="fw-bold">$15</span>
+            </div>
+            <div class="d-flex justify-content-between pt-2 border-top">
+              <h5 class="mb-0">Total</h5>
+              <h5 class="text-primary mb-0">${{ room.price|add:15 }}</h5>
+            </div>
+          </div>
+
+          <!-- Book Button -->
+          <a href="{% url 'booking' %}?room={{ room.id }}" class="btn btn-primary btn-lg w-100 mb-3">
+            Book This Room
+          </a>
+
+          <!-- Additional Info -->
+          <p class="small text-muted text-center mb-0">
+            You won't be charged yet
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Similar Rooms Section (Optional) -->
+  <div class="row mt-5 pt-5 border-top">
+    <div class="col-12">
+      <h3 class="mb-4">Similar Rooms</h3>
+    </div>
+    <div class="col-12">
+      <div class="row g-4">
+        <div class="col-sm-6 col-lg-4">
+          <div class="card h-100 room-card shadow-sm">
+            <img src="{% static 'images/room1.jpg' %}" class="card-img-top room-img" alt="Room" />
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">Executive Room</h5>
+              <p class="card-text text-muted small">Modern room with workspace</p>
+              <div class="mt-auto">
+                <div class="d-flex justify-content-between align-items-center">
+                  <strong class="text-primary">$120/night</strong>
+                  <a href="{% url 'room_details' 2 %}" class="btn btn-sm btn-outline-primary">View</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-4">
+          <div class="card h-100 room-card shadow-sm">
+            <img src="{% static 'images/room2.jpg' %}" class="card-img-top room-img" alt="Room" />
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">Premium Suite</h5>
+              <p class="card-text text-muted small">Luxurious suite with views</p>
+              <div class="mt-auto">
+                <div class="d-flex justify-content-between align-items-center">
+                  <strong class="text-primary">$250/night</strong>
+                  <a href="{% url 'room_details' 5 %}" class="btn btn-sm btn-outline-primary">View</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-4">
+          <div class="card h-100 room-card shadow-sm">
+            <img src="{% static 'images/room3.jpg' %}" class="card-img-top room-img" alt="Room" />
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">Family Suite</h5>
+              <p class="card-text text-muted small">Perfect for families</p>
+              <div class="mt-auto">
+                <div class="d-flex justify-content-between align-items-center">
+                  <strong class="text-primary">$200/night</strong>
+                  <a href="{% url 'room_details' 3 %}" class="btn btn-sm btn-outline-primary">View</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

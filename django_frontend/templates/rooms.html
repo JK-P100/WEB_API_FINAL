@@ -1,0 +1,138 @@
+﻿{% extends "base.html" %}
+{% load static %}
+{% block title %}Rooms — Staycation{% endblock %}
+{% block content %}
+
+<!-- Page Header -->
+<div class="bg-primary text-white py-5 mb-5">
+  <div class="container">
+    <h1 class="display-6">Our Rooms</h1>
+    <p class="lead mb-0">Find your perfect accommodation</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row g-4">
+    <!-- Sidebar Filters -->
+    <div class="col-lg-3">
+      <div class="card p-4 shadow-sm sticky-top" style="top: 20px;">
+        <h5 class="mb-3">Filter Rooms</h5>
+
+        <!-- Price Range -->
+        <div class="mb-4">
+          <label class="form-label fw-bold">Price Range</label>
+          <form method="get" action="">
+            <div class="input-group input-group-sm mb-2">
+              <input type="number" name="min_price" placeholder="Min" class="form-control" value="{{ request.GET.min_price|default:0 }}" />
+              <span class="input-group-text">-</span>
+              <input type="number" name="max_price" placeholder="Max" class="form-control" value="{{ request.GET.max_price|default:500 }}" />
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm w-100 mt-2">Apply Filters</button>
+          </form>
+        </div>
+
+        <hr />
+
+        <!-- Capacity -->
+        <div class="mb-4">
+          <label class="form-label fw-bold">Capacity</label>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="cap1" />
+            <label class="form-check-label" for="cap1">1 Guest</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="cap2" />
+            <label class="form-check-label" for="cap2">2 Guests</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="cap4" />
+            <label class="form-check-label" for="cap4">4 Guests</label>
+          </div>
+        </div>
+
+        <hr />
+
+        <!-- Amenities Checklist -->
+        <div class="mb-4">
+          <label class="form-label fw-bold">Amenities</label>
+          <div class="form-check form-check-sm">
+            <input class="form-check-input" type="checkbox" id="wifi" />
+            <label class="form-check-label" for="wifi">Free WiFi</label>
+          </div>
+          <div class="form-check form-check-sm">
+            <input class="form-check-input" type="checkbox" id="ac" />
+            <label class="form-check-label" for="ac">Air Conditioning</label>
+          </div>
+          <div class="form-check form-check-sm">
+            <input class="form-check-input" type="checkbox" id="tv" />
+            <label class="form-check-label" for="tv">TV</label>
+          </div>
+          <div class="form-check form-check-sm">
+            <input class="form-check-input" type="checkbox" id="mini" />
+            <label class="form-check-label" for="mini">Mini Bar</label>
+          </div>
+          <div class="form-check form-check-sm">
+            <input class="form-check-input" type="checkbox" id="balcony" />
+            <label class="form-check-label" for="balcony">Balcony</label>
+          </div>
+        </div>
+
+        <button class="btn btn-outline-primary w-100 btn-sm mb-2">Apply Filters</button>
+        <button class="btn btn-link btn-sm w-100 text-muted">Clear All</button>
+      </div>
+    </div>
+
+    <!-- Room Cards -->
+    <div class="col-lg-9">
+      <div class="mb-3">
+        <p class="text-muted"><strong>Showing {{ rooms|length }} rooms</strong></p>
+      </div>
+
+      <div class="row g-4">
+        {% if rooms %}
+          {% for room in rooms %}
+          <div class="col-sm-6 col-lg-6">
+            <div class="card h-100 room-card shadow-sm">
+              <div class="position-relative">
+                <img src="{{ room.image_url }}" class="card-img-top room-img" alt="{{ room.title }}" />
+                {% if room.badge %}
+                <span class="badge position-absolute top-0 end-0 m-3 bg-primary">{{ room.badge }}</span>
+                {% endif %}
+              </div>
+
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title">{{ room.title }}</h5>
+                <p class="card-text text-muted small">{{ room.description }}</p>
+
+                <!-- Amenities Tags -->
+                <div class="mb-3">
+                  {% for amenity in room.amenities %}
+                  <span class="badge bg-light text-dark me-1 mb-1">{{ amenity }}</span>
+                  {% endfor %}
+                </div>
+
+                <!-- Guest & Price Info -->
+                <div class="mt-auto">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <small class="text-muted">{{ room.guests }} {% if room.guests == 1 %}Guest{% else %}Guests{% endif %}</small>
+                    <small class="text-muted">{{ room.type }}</small>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="text-primary fw-bold">${{ room.price }}<small class="text-muted">/night</small></div>
+                    <a href="{% url 'room_details' room.id %}" class="btn btn-outline-primary btn-sm">View Details</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        {% else %}
+          <div class="col-12">
+            <p class="text-muted text-center py-5">No rooms found matching your filters.</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,227 @@
+﻿{% extends "base.html" %}
+{% load static %}
+{% block title %}Booking — Staycation{% endblock %}
+{% block content %}
+
+<div class="container my-5">
+  <div class="row g-5">
+    <!-- Booking Form (Left) -->
+    <div class="col-lg-7">
+      <h2 class="mb-4">Complete Your Booking</h2>
+
+      <form method="post" action="" class="needs-validation" novalidate>
+        {% csrf_token %}
+
+        <!-- Guest Information -->
+        <div class="card p-4 mb-4 shadow-sm">
+          <h5 class="mb-3">Guest Information</h5>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">First Name <span class="text-danger">*</span></label>
+              <input type="text" name="first_name" class="form-control" required />
+              <div class="invalid-feedback">First name is required.</div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Last Name <span class="text-danger">*</span></label>
+              <input type="text" name="last_name" class="form-control" required />
+              <div class="invalid-feedback">Last name is required.</div>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Email <span class="text-danger">*</span></label>
+              <input type="email" name="email" class="form-control" required />
+              <div class="invalid-feedback">Valid email is required.</div>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Phone Number <span class="text-danger">*</span></label>
+              <input type="tel" name="phone" class="form-control" required />
+              <div class="invalid-feedback">Phone number is required.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stay Details -->
+        <div class="card p-4 mb-4 shadow-sm">
+          <h5 class="mb-3">Stay Details</h5>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Select Room <span class="text-danger">*</span></label>
+              <select name="room" class="form-select" id="roomSelect" required>
+                <option value="">Choose a room...</option>
+                {% for room in rooms %}
+                  <option value="{{ room.id }}" data-price="{{ room.price }}">
+                    {{ room.title }} - ${{ room.price }}/night
+                  </option>
+                {% endfor %}
+              </select>
+              <div class="invalid-feedback">Please select a room.</div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Number of Guests <span class="text-danger">*</span></label>
+              <input type="number" name="guests" id="guestsInput" class="form-control" min="1" max="6" value="1" required />
+              <div class="invalid-feedback">Number of guests is required.</div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Check-in Date <span class="text-danger">*</span></label>
+              <input type="date" name="checkin" id="checkinInput" class="form-control" required />
+              <div class="invalid-feedback">Check-in date is required.</div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Check-out Date <span class="text-danger">*</span></label>
+              <input type="date" name="checkout" id="checkoutInput" class="form-control" required />
+              <div class="invalid-feedback">Check-out date is required.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Special Requests -->
+        <div class="card p-4 mb-4 shadow-sm">
+          <h5 class="mb-3">Special Requests (Optional)</h5>
+          <textarea name="special_requests" class="form-control" rows="4" placeholder="Any special requests or dietary requirements?"></textarea>
+        </div>
+
+        <!-- Terms & Conditions -->
+        <div class="form-check mb-4">
+          <input type="checkbox" name="agree_terms" class="form-check-input" id="agreeTerms" required />
+          <label class="form-check-label" for="agreeTerms">
+            I agree to the <a href="#" class="text-primary">terms and conditions</a> and <a href="#" class="text-primary">privacy policy</a>
+          </label>
+          <div class="invalid-feedback">You must agree to the terms.</div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg w-100">Complete Booking</button>
+      </form>
+    </div>
+
+    <!-- Booking Summary (Right) -->
+    <div class="col-lg-5">
+      <div class="card p-4 shadow-sm sticky-top" style="top: 20px;">
+        <h5 class="mb-4">Booking Summary</h5>
+
+        <!-- Room Selection Summary -->
+        <div class="mb-4 pb-4 border-bottom">
+          <h6 class="text-muted small mb-2">SELECTED ROOM</h6>
+          <p class="fw-bold mb-0" id="summary_room">Select a room above</p>
+        </div>
+
+        <!-- Dates Summary -->
+        <div class="mb-4 pb-4 border-bottom">
+          <h6 class="text-muted small mb-2">DATES</h6>
+          <div class="d-flex justify-content-between mb-2">
+            <span>Check-in:</span>
+            <span id="summary_checkin" class="fw-bold">-</span>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span>Check-out:</span>
+            <span id="summary_checkout" class="fw-bold">-</span>
+          </div>
+          <small class="text-muted mt-2 d-block">
+            <strong id="summary_nights">0</strong> nights
+          </small>
+        </div>
+
+        <!-- Guests Summary -->
+        <div class="mb-4 pb-4 border-bottom">
+          <h6 class="text-muted small mb-2">GUESTS</h6>
+          <p class="fw-bold mb-0" id="summary_guests">1 Guest</p>
+        </div>
+
+        <!-- Price Breakdown -->
+        <div class="mb-4 pb-4 border-bottom">
+          <h6 class="text-muted small mb-3">PRICE BREAKDOWN</h6>
+          <div class="d-flex justify-content-between mb-2">
+            <span>Room Rate:</span>
+            <span id="summary_room_price" class="fw-bold">$0</span>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span>Taxes & Fees:</span>
+            <span id="summary_taxes" class="fw-bold">$0</span>
+          </div>
+        </div>
+
+        <!-- Total -->
+        <div class="mb-4">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Total</h5>
+            <h4 class="text-primary mb-0" id="summary_total">$0</h4>
+          </div>
+        </div>
+
+        <!-- Cancellation Policy -->
+        <div class="alert alert-info small mb-0">
+          <strong>Free Cancellation</strong>
+          <p class="mb-0">Cancel up to 24 hours before check-in for a full refund.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const roomSelect = document.getElementById("roomSelect");
+  const guestsInput = document.getElementById("guestsInput");
+  const checkinInput = document.getElementById("checkinInput");
+  const checkoutInput = document.getElementById("checkoutInput");
+
+  function updateSummary() {
+    const selectedOption = roomSelect.options[roomSelect.selectedIndex];
+    const roomPrice = parseFloat(selectedOption.getAttribute("data-price")) || 0;
+    const guests = guestsInput.value || 1;
+    const checkin = checkinInput.value;
+    const checkout = checkoutInput.value;
+
+    // Update room name
+    if (roomSelect.value) {
+      document.getElementById("summary_room").textContent = selectedOption.text.split(" - ")[0];
+    }
+
+    // Update guests
+    document.getElementById("summary_guests").textContent = guests + (guests == 1 ? " Guest" : " Guests");
+
+    // Update dates
+    document.getElementById("summary_checkin").textContent = checkin || "-";
+    document.getElementById("summary_checkout").textContent = checkout || "-";
+
+    // Calculate nights and total
+    if (checkin && checkout && roomSelect.value) {
+      const checkinDate = new Date(checkin);
+      const checkoutDate = new Date(checkout);
+      const nights = Math.ceil((checkoutDate - checkinDate) / (1000 * 60 * 60 * 24));
+
+      document.getElementById("summary_nights").textContent = nights;
+
+      const subtotal = roomPrice * nights;
+      const taxes = Math.round(subtotal * 0.1);
+      const total = subtotal + taxes;
+
+      document.getElementById("summary_room_price").textContent = "$" + subtotal;
+      document.getElementById("summary_taxes").textContent = "$" + taxes;
+      document.getElementById("summary_total").textContent = "$" + total;
+    }
+  }
+
+  roomSelect.addEventListener("change", updateSummary);
+  guestsInput.addEventListener("change", updateSummary);
+  checkinInput.addEventListener("change", updateSummary);
+  checkoutInput.addEventListener("change", updateSummary);
+
+  // Form validation
+  const form = document.querySelector("form");
+  form.addEventListener("submit", function (event) {
+    if (!form.checkValidity()) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    form.classList.add("was-validated");
+  });
+});
+</script>
+{% endblock %}

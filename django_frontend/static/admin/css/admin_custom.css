@@ -1,0 +1,120 @@
+﻿/* Basic admin theme to match Figma design: dark left sidebar, light content cards */
+
+:root {
+  --primary: #2563eb;
+  --sidebar-bg: #141821;
+  --sidebar-contrast: rgba(255,255,255,0.08);
+  --card-bg: #ffffff;
+  --muted: #6b7280;
+}
+
+/* Remove default admin header background, we'll style our own */
+#header, .breadcrumbs {
+  display: none;
+}
+
+/* Shell layout */
+.admin-shell {
+  display: flex;
+  gap: 24px;
+  align-items: stretch;
+}
+
+/* Sidebar */
+.admin-sidebar {
+  width: 220px;
+  background: var(--sidebar-bg);
+  color: #ffffff;
+  padding: 24px 12px;
+  border-radius: 6px;
+  height: calc(100vh - 40px);
+  box-shadow: none;
+}
+.sidebar-inner {
+  display:flex;
+  flex-direction: column;
+  height:100%;
+}
+.sidebar-section {
+  margin-top: 8px;
+}
+.sidebar-item {
+  display: block;
+  color: rgba(255,255,255,0.9);
+  padding: 10px 12px;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  text-decoration: none;
+  transition: background .12s;
+}
+.sidebar-item:hover { background: var(--sidebar-contrast); color: #fff; }
+
+/* Main area */
+.admin-main {
+  flex: 1;
+  padding: 0;
+}
+.page-title {
+  margin: 0 0 18px 0;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+/* Wrap the default admin content in a card-like container */
+.admin-content-wrapper {
+  background: transparent;
+}
+.app-index, .module {
+  background: transparent;
+}
+
+/* Tables styling */
+table {
+  border-collapse: collapse;
+}
+.table th, .table td {
+  padding: 12px 16px;
+  vertical-align: middle;
+  border-top: 1px solid #eef1f6;
+}
+.table thead th {
+  border-top: 0;
+  background: transparent;
+  color: #374151;
+}
+
+/* Card look for change list area */
+.change-list, .module {
+  background: #fff;
+  padding: 18px;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(13, 16, 23, 0.04);
+}
+
+/* Buttons */
+a.button, .button {
+  background: var(--primary);
+  color: #fff;
+  border-radius: 6px;
+  padding: 6px 10px;
+  text-decoration: none;
+  display:inline-block;
+}
+a.button:hover, .button:hover { opacity: 0.95; }
+
+/* Badges (status) */
+span.label {
+  border-radius: 999px;
+  padding: 4px 10px;
+  display:inline-block;
+  font-size: 12px;
+}
+span.label-green { background: #dcfce7; color: #065f46; }
+span.label-yellow { background: #fef3c7; color: #92400e; }
+span.label-red { background: #fee2e2; color: #7f1d1d; }
+
+/* Small responsiveness */
+@media (max-width: 991px) {
+  .admin-shell { flex-direction: column; }
+  .admin-sidebar { width: 100%; height: auto; border-radius: 6px; }
+}

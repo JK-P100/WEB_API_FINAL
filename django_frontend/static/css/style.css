@@ -1,0 +1,134 @@
+﻿:root{
+  --primary: #2563eb;
+  --muted: #6b7280;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+.hero-section{
+  height: 420px;
+  position: relative;
+  overflow: hidden;
+}
+
+.room-hero {
+  height: 300px;
+  overflow: hidden;
+}
+
+.room-hero-img {
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-img{
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+  filter: brightness(0.55);
+}
+
+.hero-overlay{
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.hero-overlay h1{
+  font-size: clamp(1.6rem, 3.2vw, 2.6rem);
+  pointer-events: auto;
+  margin-bottom: .5rem;
+  color: white;
+}
+
+.hero-overlay p, .hero-overlay .btn{
+  pointer-events: auto;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.room-card{
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.room-card:hover{
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important;
+}
+
+.room-img{
+  height: 200px;
+  object-fit: cover;
+}
+
+.room-card .badge{
+  border-radius: .5rem;
+  padding: .45rem .6rem;
+  font-weight: 600;
+}
+
+.amenity-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+}
+
+.testimonial-card{
+  border-radius: 10px;
+  background: #fff;
+}
+
+.avatar{
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  background: var(--primary);
+  color: #fff;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+}
+
+footer{
+  background: #0f1724;
+  margin-top: auto;
+}
+
+.breadcrumb {
+  background-color: #f8f9fa;
+  padding: 0.75rem 0;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+@media (max-width: 767px){
+  .hero-section{height: 300px;}
+  .room-img{height:160px;}
+  .sticky-top { position: static !important; }
+  .room-hero { height: 200px; }
+}
